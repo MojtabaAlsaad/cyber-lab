@@ -1,0 +1,23 @@
+services:
+  plc:
+    build: .
+    command: ["python", "/app/plc.py"]
+    networks:
+      - ot_net
+    restart: unless-stopped
+
+  client:
+    build: .
+    command: ["python", "/app/client.py"]
+    networks:
+      - ot_net
+    cap_add:
+      - NET_RAW
+    volumes:
+      - ./captures:/captures
+
+networks:
+  ot_net:
+    name: ot-lab-internal
+    driver: bridge
+    internal: true
